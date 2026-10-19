@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-labelledby="title">
+  <title id="title">Emblema ilustrativo del Liceo Colinas del Llano</title>
+  <circle cx="120" cy="120" r="112" fill="#fff" stroke="#315d9b" stroke-width="8"/>
+  <circle cx="120" cy="120" r="96" fill="#fff7dc" stroke="#c96972" stroke-width="3"/>
+  <path d="M32 78h176v27H32z" fill="#f3d77a"/>
+  <path d="M32 105h176v27H32z" fill="#e5eefb"/>
+  <path d="M32 132h176v27H32z" fill="#fbe9e9"/>
+  <path d="M120 64 136 93h-32z" fill="#315d9b"/>
+  <path d="M120 83v18" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+  <path d="M76 116q22-15 44 0v41q-22-15-44 0z" fill="#fff" stroke="#315d9b" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M164 116q-22-15-44 0v41q22-15 44 0z" fill="#fff" stroke="#315d9b" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M120 116v43" stroke="#315d9b" stroke-width="4"/>
+  <text x="120" y="183" text-anchor="middle" fill="#315d9b" font-family="Arial, sans-serif" font-size="14" font-weight="700">COLINAS DEL LLANO</text>
+</svg>
