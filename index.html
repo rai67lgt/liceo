@@ -1,916 +1,381 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Liceo Bolivariano "Colinas del Llano"</title>
-  <style>
-    :root {
-      font-size: 100%;
-      --azul: #315d9b;
-      --amarillo: #f3d77a;
-      --rojo: #c96972;
-      --gris: #f5f7fb;
-      --azul-pastel: #e5eefb;
-      --amarillo-pastel: #fff7dc;
-      --rojo-pastel: #fbe9e9;
-      --texto: #222;
-      --blanco: #fff;
-    }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      color: var(--texto);
-      line-height: 1.6;
-      min-width: 320px;
-      background: #e5eefb;
-      background-attachment: fixed;
-      isolation: isolate;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      background: url("img/fondo-institucional.png") center / cover no-repeat;
-      filter: blur(3px);
-      opacity: 0.19;
-      transform: scale(1.02);
-    }
-
-    body > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    body.vista-inicio section,
-    body.vista-seccion section {
-      display: none;
-    }
-
-    body.vista-seccion section:target {
-      display: block;
-      animation: aparecer 0.25s ease-out;
-    }
-
-    body.vista-seccion .hero {
-      display: none;
-    }
-
-    @keyframes aparecer {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ---------- Barra superior ---------- */
-    .barra-superior {
-      display: none;
-    }
-
-    /* ---------- Menú ---------- */
-    header {
-      background: rgba(255, 255, 255, 0.94);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 4px 18px rgba(49, 93, 155, 0.12);
-      border-top: 6px solid transparent;
-      border-image: linear-gradient(90deg, var(--amarillo), var(--azul), var(--rojo)) 1;
-    }
-
-    .navbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      max-width: 1440px;
-      margin: 0 auto;
-      padding: 14px 4%;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      font-weight: bold;
-      color: var(--azul);
-    }
-
-    .logo-emblema {
-      display: grid;
-      place-items: center;
-      height: 72px;
-      width: 72px;
-      flex: 0 0 auto;
-      overflow: hidden;
-      border-radius: 50%;
-      background: #87ceeb;
-    }
-
-    .logo-emblema img {
-      display: block;
-      height: 100%;
-      width: 100%;
-      object-fit: contain;
-      padding: 4px;
-    }
-
-    .logo-titulo {
-      display: block;
-      font-size: 1.1rem;
-      line-height: 1.25;
-    }
-
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: clamp(10px, 1.4vw, 22px);
-    }
-
-    nav a {
-      text-decoration: none;
-      color: var(--texto);
-      font-weight: bold;
-      transition: color 0.3s;
-      white-space: nowrap;
-    }
-
-    nav a:hover { color: var(--azul); }
-
-    .menu-toggle {
-      display: none;
-      font-size: 1.75rem;
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--azul);
-    }
-
-    .accesibilidad {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex: 0 0 auto;
-      padding: 5px;
-      border-radius: 12px;
-      background: var(--azul-pastel);
-    }
-
-    .accesibilidad span {
-      padding: 0 4px;
-      color: var(--azul);
-      font-size: 0.8rem;
-      font-weight: bold;
-      white-space: nowrap;
-    }
-
-    .accesibilidad button {
-      min-width: 38px;
-      min-height: 38px;
-      padding: 4px 8px;
-      border: 1px solid rgba(49, 93, 155, 0.25);
-      border-radius: 8px;
-      background: white;
-      color: var(--azul);
-      font: inherit;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .accesibilidad button:hover { background: var(--amarillo-pastel); }
-
-    a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
-      outline: 3px solid var(--rojo);
-      outline-offset: 3px;
-    }
-
-    /* ---------- Portada ---------- */
-    .hero {
-      background: linear-gradient(120deg, rgba(229, 238, 251, 0.84), rgba(255, 247, 220, 0.82) 58%, rgba(251, 233, 233, 0.84));
-      color: var(--texto);
-      text-align: center;
-      padding: clamp(72px, 10vw, 132px) 5%;
-      border-bottom: 8px solid transparent;
-      border-image: linear-gradient(90deg, var(--amarillo), var(--azul), var(--rojo)) 1;
-    }
-
-    .hero h1 {
-      max-width: 900px;
-      margin: 0 auto 15px;
-      font-size: 2.625rem;
-    }
-
-    .hero p {
-      max-width: 720px;
-      margin: 0 auto 25px;
-      font-size: 1.125rem;
-    }
-
-    .inicio-contenido {
-      display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      align-items: center;
-      gap: clamp(24px, 5vw, 58px);
-      max-width: 1200px;
-      margin: 0 auto;
-      text-align: left;
-    }
-
-    .inicio-contenido h1,
-    .inicio-contenido p {
-      margin-left: 0;
-      margin-right: 0;
-    }
-
-    .inicio-contenido h1 { max-width: 720px; }
-
-    .inicio-contenido .hero-etiqueta {
-      display: inline-block;
-      margin-bottom: 14px;
-      padding: 5px 14px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.75);
-      color: var(--azul);
-      font-size: 0.9rem;
-      font-weight: bold;
-    }
-
-    .foto-destacada {
-      width: 100%;
-      height: clamp(230px, 29vw, 350px);
-      object-fit: cover;
-      object-position: center 55%;
-      border: 7px solid rgba(255, 255, 255, 0.8);
-      border-radius: 24px;
-      box-shadow: 0 16px 38px rgba(49, 93, 155, 0.2);
-    }
-
-    .semblanza {
-      max-width: 1200px;
-      margin: 0 auto 36px;
-      padding: clamp(22px, 3vw, 34px);
-      border-left: 5px solid var(--amarillo);
-      border-radius: 0 18px 18px 0;
-      background: linear-gradient(110deg, rgba(229, 238, 251, 0.8), rgba(255, 247, 220, 0.72));
-      text-align: left;
-    }
-
-    .semblanza h2 {
-      margin-bottom: 8px;
-      color: var(--azul);
-      font-size: 1.45rem;
-    }
-
-    .btn {
-      display: inline-block;
-      background: var(--amarillo);
-      color: var(--texto);
-      padding: 12px 28px;
-      border-radius: 999px;
-      text-decoration: none;
-      font-weight: bold;
-      box-shadow: 0 5px 14px rgba(49, 93, 155, 0.12);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(49, 93, 155, 0.2); }
-
-    /* ---------- Secciones ---------- */
-    section {
-      padding: clamp(42px, 6vw, 80px) max(5%, calc((100% - 1200px) / 2));
-      min-height: 55vh;
-      background: rgba(255, 255, 255, 0.78);
-      scroll-margin-top: 120px;
-    }
-
-    .titulo {
-      text-align: center;
-      margin: 0 auto 40px;
-    }
-
-    .titulo h2 {
-      color: var(--azul);
-      font-size: 2rem;
-      margin-bottom: 10px;
-    }
-
-    .titulo span {
-      display: block;
-      width: 80px;
-      height: 4px;
-      background: linear-gradient(90deg, var(--amarillo), var(--azul), var(--rojo));
-      margin: 0 auto;
-      border-radius: 2px;
-    }
-
-    .dos-columnas {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      align-items: center;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .dos-columnas img {
-      width: 100%;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-
-    .tarjetas {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
-      gap: clamp(16px, 2.5vw, 28px);
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .tarjeta {
-      background: rgba(255, 255, 255, 0.94);
-      padding: clamp(22px, 3vw, 34px);
-      border-radius: 18px;
-      border-top: 5px solid var(--amarillo);
-      box-shadow: 0 8px 24px rgba(49, 93, 155, 0.09);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .tarjeta:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(49, 93, 155, 0.15); }
-
-    .tarjeta h3 {
-      color: var(--azul);
-      margin-bottom: 10px;
-    }
-
-    .galeria {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
-      gap: 18px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .galeria img {
-      width: 100%;
-      height: clamp(180px, 22vw, 280px);
-      object-fit: cover;
-      border-radius: 16px;
-      box-shadow: 0 8px 22px rgba(49, 93, 155, 0.14);
-    }
-
-    .foto-tarjeta {
-      overflow: hidden;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.94);
-      box-shadow: 0 8px 22px rgba(49, 93, 155, 0.12);
-    }
-
-    .foto-tarjeta img { display: block; }
-
-    .foto-tarjeta figcaption {
-      padding: 12px 15px;
-      color: var(--azul);
-      font-weight: bold;
-      text-align: center;
-    }
-
-    .foto-directiva {
-      max-width: 900px;
-      margin: 28px auto 0;
-    }
-
-    .foto-directiva img {
-      width: 100%;
-      max-height: 460px;
-      object-fit: cover;
-      object-position: center 45%;
-      border: 6px solid white;
-      border-radius: 20px;
-      box-shadow: 0 10px 28px rgba(49, 93, 155, 0.14);
-    }
-
-    .foto-directiva figcaption {
-      margin-top: 8px;
-      color: var(--azul);
-      text-align: center;
-    }
-
-    .noticia {
-      background: rgba(255, 255, 255, 0.94);
-      border-left: 5px solid var(--rojo);
-      padding: 20px 25px;
-      border-radius: 8px 16px 16px 8px;
-      margin: 0 auto 20px;
-      max-width: 1200px;
-    }
-
-    .noticia .fecha {
-      color: var(--rojo);
-      font-weight: bold;
-      font-size: 0.875rem;
-    }
-
-    .noticia h3 {
-      margin: 6px 0 8px;
-      color: var(--azul);
-    }
-
-    /* ---------- Contacto ---------- */
-    .contacto {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .contacto p {
-      margin-bottom: 12px;
-    }
-
-    .redes a {
-      display: inline-block;
-      margin-right: 15px;
-      color: var(--azul);
-      font-weight: bold;
-      text-decoration: none;
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    form label {
-      font-weight: bold;
-      color: var(--azul);
-      margin-bottom: -8px;
-    }
-
-    form input, form textarea {
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 0.9375rem;
-      font-family: inherit;
-    }
-
-    form textarea { min-height: 120px; resize: vertical; }
-
-    form button {
-      background: var(--azul);
-      color: var(--blanco);
-      border: none;
-      padding: 12px;
-      border-radius: 6px;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    form button:hover { background: var(--rojo); }
-
-    /* ---------- Pie de página ---------- */
-    footer {
-      background: linear-gradient(125deg, #315d9b, #466fa5);
-      color: var(--blanco);
-      text-align: center;
-      padding: 38px max(5%, calc((100% - 1200px) / 2));
-      border-top: 7px solid transparent;
-      border-image: linear-gradient(90deg, var(--amarillo), var(--azul-pastel), var(--rojo)) 1;
-    }
-
-    footer a {
-      color: var(--amarillo);
-      text-decoration: none;
-      margin: 0 10px;
-    }
-
-    footer p { margin-top: 10px; font-size: 0.875rem; }
-
-    .pie-contacto {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 8px 28px;
-      margin: 20px auto 0;
-      padding-top: 18px;
-      border-top: 1px solid rgba(255, 255, 255, 0.3);
-    }
-
-    .pie-contacto p { margin: 0; }
-
-    /* ---------- Responsive ---------- */
-    @media (max-width: 1050px) {
-      .menu-toggle { display: block; order: 2; }
-
-      .logo { flex: 1 1 0; }
-      .logo-emblema { width: 58px; height: 58px; }
-      .logo-titulo { font-size: 1rem; }
-
-      nav {
-        display: none;
-        order: 4;
-        flex: 1 0 100%;
-      }
-
-      nav.activo { display: block; }
-
-      nav ul {
-        flex-direction: column;
-        gap: 4px;
-        padding: 8px 0;
-      }
-
-      nav a {
-        display: block;
-        padding: 9px 12px;
-        border-radius: 8px;
-      }
-
-      nav a:hover { background: var(--azul-pastel); }
-
-      .navbar { flex-wrap: wrap; gap: 10px; padding: 12px 5%; }
-
-      .accesibilidad { order: 3; }
-    }
-
-    @media (max-width: 760px) {
-      .dos-columnas, .contacto {
-        grid-template-columns: 1fr;
-        gap: 24px;
-      }
-
-      .hero h1 { font-size: 2rem; }
-      .hero { padding: 72px 7%; }
-      .inicio-contenido { grid-template-columns: 1fr; text-align: center; }
-      .inicio-contenido h1, .inicio-contenido p { margin-left: auto; margin-right: auto; }
-      .inicio-contenido .hero-etiqueta { margin-top: 2px; }
-      .foto-destacada { height: clamp(220px, 55vw, 340px); }
-      .tarjetas, .galeria { grid-template-columns: 1fr; }
-      .galeria img { height: 230px; }
-      section { scroll-margin-top: 175px; }
-    }
-
-    @media (max-width: 480px) {
-      body { background-attachment: scroll; }
-      body::before { background-position: center; opacity: 0.16; }
-      .navbar { padding: 10px 4%; }
-      .logo { gap: 9px; }
-      .logo-emblema { width: 50px; height: 50px; }
-      .logo-titulo { font-size: 0.9rem; }
-      .accesibilidad {
-        flex: 1 0 100%;
-        justify-content: center;
-        order: 3;
-      }
-      .accesibilidad span { margin-right: auto; }
-      nav { order: 4; }
-      .hero { padding: 58px 6%; }
-      .hero h1 { font-size: 1.75rem; }
-      .hero p { font-size: 1rem; }
-      .semblanza { margin-bottom: 26px; }
-      section { padding: 42px 6%; scroll-margin-top: 210px; }
-      .titulo { margin-bottom: 28px; }
-      .titulo h2 { font-size: 1.65rem; }
-      .tarjetas { grid-template-columns: 1fr; }
-      .contacto { gap: 26px; }
-      footer { padding: 30px 6%; }
-      .galeria img { height: 200px; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        scroll-behavior: auto !important;
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-      }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Liceo Bolivariano Colinas del Llano</title>
+<style>
+:root { --ink:#153B5B; --paper:#EAF7FC; --green:#187FAF; --clay:#C62828; --yellow:#F4C542; --muted:#425B6D; --white:#FFFFFF; }
+* { box-sizing: border-box; }
+body { margin:0; font-family: Inter, system-ui, sans-serif; color:var(--ink); background:linear-gradient(180deg,#DDF2FB 0%,var(--paper) 48%,#DDF2FB 100%); line-height:1.6; }
+h1,h2,h3 { font-family: Fraunces, Georgia, serif; margin:0 0 12px; }
+section { padding: 64px 8%; scroll-margin-top: 72px; background:rgba(255,255,255,.82); border-bottom:3px solid var(--yellow); }
+nav { position:sticky; top:0; z-index:10; background:var(--ink); color:var(--paper); border-bottom:4px solid var(--yellow); display:flex; flex-wrap:wrap; gap:16px; justify-content:space-between; align-items:center; padding:14px 8%; }
+nav a { color:var(--paper); text-decoration:none; font-size:14px; }
+nav a:hover { color:var(--yellow); }
+.btn { display:inline-block; padding:12px 20px; border-radius:8px; background:var(--yellow); color:var(--ink); text-decoration:none; font-weight:700; border:2px solid var(--yellow); cursor:pointer; font-size:15px; }
+.btn:hover { background:var(--clay); border-color:var(--clay); color:var(--white); }
+.btn.outline { background:transparent; color:var(--green); border:2px solid var(--yellow); }
+.card { background:var(--white); border:1px solid #D5EAF3; border-top:4px solid var(--yellow); border-radius:14px; padding:24px; }
+.muted { color:var(--muted); }
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; }
+.photo { width:100%; max-height:420px; object-fit:cover; border:4px solid var(--yellow); border-radius:16px; background:#DCE3DE; }
+.photo-fallback { min-height:300px; border:2px dashed var(--green); border-radius:16px; display:flex; align-items:center; justify-content:center; color:var(--green); }
+footer { background:var(--ink); color:var(--paper); border-top:6px solid transparent; border-image:linear-gradient(90deg,var(--yellow) 0 33%,#2498D0 33% 66%,var(--clay) 66% 100%) 1; padding:40px 8%; font-size:14px; }
+footer a { color:var(--yellow); }
+.footer-redes { display:flex; flex-wrap:wrap; justify-content:center; gap:10px 20px; margin:16px 0; }
+.footer-redes a { font-weight:600; text-underline-offset:3px; }
+.footer-redes a:hover { color:var(--white); }
+input { height:44px; border:1px solid #B9C4BE; border-radius:8px; padding:0 12px; font-size:15px; width:100%; }
+label { display:flex; flex-direction:column; gap:6px; font-size:14px; font-weight:500; }
+details { background:var(--white); border:1px solid #D5EAF3; border-left:4px solid var(--yellow); border-radius:12px; padding:16px 20px; margin-bottom:12px; }
+summary { cursor:pointer; font-weight:600; }
+details[open] > summary { color:var(--green); margin-bottom:12px; }
+.portal-list { display:grid; gap:12px; }
+.portal-list details { border:1px solid #DCEAF0; border-left:4px solid var(--yellow); box-shadow:0 4px 14px rgba(21,59,91,.08); }
+.portal-list details:nth-child(3n) { border-left-color:var(--clay); }
+.portal-list details > p:last-child { margin-bottom:0; }
+.horario-reservado { min-height:76px; padding:16px; border:1px dashed var(--yellow); border-radius:10px; color:var(--muted); background:#F2FAFD; }
+.afiche-grid { align-items:start; margin-top:20px; }
+.afiche-card { margin:0; padding:14px; }
+.afiche-card img { display:block; width:100%; max-height:560px; object-fit:contain; border-radius:10px; background:#F4EFE4; }
+.afiche-card figcaption { margin-top:12px; font-weight:600; }
+.fuente-proyecto { display:inline-block; margin-top:14px; color:var(--green); font-weight:700; text-decoration:underline; text-underline-offset:3px; }
+.proyecto-enlace { display:block; color:inherit; border-left:4px solid var(--clay); text-decoration:none; transition:transform .2s, box-shadow .2s; }
+.proyecto-enlace:hover { transform:translateY(-3px); box-shadow:0 10px 24px rgba(30,43,36,.12); }
+.proyecto-enlace:focus-visible, .fuente-proyecto:focus-visible { outline:3px solid var(--clay); outline-offset:3px; }
+/* Carrusel */
+.carousel { display:flex; gap:16px; overflow-x:auto; scroll-snap-type:x mandatory; padding:8px 0 16px; }
+.carousel .card { flex:0 0 260px; scroll-snap-align:start; }
+/* Pantalla de inicio de sesión */
+#login { position:fixed; inset:0; background:linear-gradient(135deg,#59B8E8 0%,var(--ink) 62%,var(--clay) 100%); display:flex; align-items:center; justify-content:center; z-index:100; padding:24px; }
+#login form { width:100%; max-width:420px; background:var(--white); border-radius:16px; padding:36px; display:flex; flex-direction:column; gap:16px; box-shadow:0 8px 32px rgba(30,43,36,.08); }
+#login .error { color:var(--clay); font-size:14px; min-height:18px; }
+/* Animación de entrada: un punto que se expande */
+#intro { position:fixed; inset:0; background:var(--green); z-index:200; display:none; align-items:center; justify-content:center; overflow:hidden; }
+#intro.on { display:flex; }
+#intro .burst { position:absolute; width:100vmax; height:100vmax; border-radius:50%; background:radial-gradient(circle,var(--yellow) 0%,var(--clay) 70%); transform:scale(0); animation:expand 1.4s ease-out forwards; }
+@keyframes expand { from { transform:scale(0.01); } to { transform:scale(1); } }
+#intro .logo { position:relative; width:min(260px,60vw); height:auto; border-radius:16px; opacity:0; transform:scale(.8); animation:pop .8s 1.2s ease-out forwards; box-shadow:0 12px 40px rgba(0,0,0,.35); }
+@keyframes pop { to { opacity:1; transform:scale(1); } }
+/* Secciones que aparecen con animación al desplazarse */
+.reveal { opacity:0; transform:translateY(40px); transition:opacity .7s ease, transform .7s ease; }
+.reveal.show { opacity:1; transform:none; }
+/* Color en las secciones */
+#quienes, #contacto, #galeria, #estudiantes, #directiva, #horarios, #efemerides, #explorar { background:linear-gradient(180deg,#F7FCFE,var(--paper)); }
+#directiva h2, #historia h2, #quienes h2, #anuncios h2, #contacto h2, #dudas h2, #estudiantes h2, #horarios h2, #efemerides h2, #explorar h2 { color:var(--green); }
+#site { display:none; }
+#site.on { display:block; }
+#portada { min-height:88vh; display:flex; flex-direction:column; justify-content:center; background:linear-gradient(135deg,#218FC2 0%,#15577F 60%,var(--ink) 100%); color:var(--paper); border-bottom:6px solid var(--yellow); }
+#portada .muted { color:#E5F5FC; }
+.afiche-card img { border:2px solid var(--yellow); }
+.afiche-card figcaption { color:var(--ink); }
+</style>
 </head>
 <body>
 
-  <!-- Menú -->
-  <header>
-    <div class="navbar">
-      <div class="logo">
-        <span class="logo-emblema">
-          <img src="img/logo-institucional-transparente.png" alt="Logo oficial del Complejo Educativo Colinas del Llano">
-        </span>
-        <span>
-          <span class="logo-titulo">Liceo Bolivariano<br>"Colinas del Llano"</span>
-        </span>
-      </div>
-      <button class="menu-toggle" id="menuBtn" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu">☰</button>
-      <nav id="menu">
-        <ul>
-          <li><a href="#inicio">Inicio</a></li>
-          <li><a href="#quienes">¿Quiénes somos?</a></li>
-          <li><a href="#proyectos">Proyectos</a></li>
-          <li><a href="#directiva">Directiva</a></li>
-          <li><a href="#noticias">Noticias</a></li>
-          <li><a href="#contacto">Contáctanos</a></li>
-        </ul>
-      </nav>
-      <div class="accesibilidad" role="group" aria-label="Tamaño del texto">
-        <span>Tamaño del texto</span>
-        <button id="reducirTexto" type="button" aria-label="Reducir tamaño del texto">A−</button>
-        <button id="restablecerTexto" type="button" aria-label="Restablecer tamaño del texto">A</button>
-        <button id="aumentarTexto" type="button" aria-label="Aumentar tamaño del texto">A+</button>
-        <output id="nivelTexto" aria-live="polite">100%</output>
-      </div>
+<!-- 1. Inicio de sesión -->
+<div id="login">
+  <form id="loginForm" novalidate>
+    <img src="img/escudo-colinas-actualizado.png" alt="Escudo del Complejo Educativo Colinas del Llano" style="width:110px;height:auto;align-self:center;border-radius:12px;">
+    <div>
+      <h1 style="font-size:28px;">Bienvenido</h1>
+      <p class="muted" style="margin:0;">Escribe tu nombre y sección para acceder al portal.</p>
     </div>
-  </header>
+    <label>Nombre completo <input id="nombre" type="text" placeholder="Nombre y apellido"></label>
+    <label>Sección <input id="seccion" type="text" placeholder="Ej. 4.º C"></label>
+    <div class="error" id="loginError"></div>
+    <button class="btn" type="submit">Ingresar</button>
+    <p class="muted" style="font-size:12px;text-align:center;margin:0;">Tu nombre y sección solo se usan durante esta visita. No pedimos correo ni cédula.</p>
+  </form>
+</div>
+
+<!-- 2. Animación de entrada -->
+<div id="intro"><div class="burst"></div><img class="logo" src="img/escudo-colinas-actualizado.png" alt="Escudo del Complejo Educativo Colinas del Llano"></div>
+
+<!-- 3. Sitio -->
+<div id="site">
+  <nav>
+    <strong style="font-family:Fraunces,serif;font-size:18px;">Colinas del Llano</strong>
+    <div style="display:flex;flex-wrap:wrap;gap:16px;">
+      <a href="#quienes">Quiénes somos</a>
+      <a href="#historia">Historia</a>
+      <a href="#estudiantes">Estudiantes</a>
+      <a href="#directiva">Directiva</a>
+      <a href="#horarios">Horarios</a>
+      <a href="#explorar">Explora el portal</a>
+      <a href="#efemerides">Efemérides</a>
+      <a href="#anuncios">Anuncios</a>
+      <a href="#contacto">Contáctanos</a>
+      <a href="#dudas">Dudas</a>
+    </div>
+  </nav>
 
   <!-- Portada -->
-  <div class="hero" id="inicio">
-    <div class="inicio-contenido">
-      <div>
-        <span class="hero-etiqueta">Ciudad Varyná · Barinas, Venezuela</span>
-        <h1>Liceo Bolivariano "Colinas del Llano"</h1>
-        <p>Formando al nuevo republicano y bachiller con valores, ciencia y compromiso social.</p>
-        <p>Desde sus inicios en 2003 y su fundación oficial el 14 de noviembre de 2005, el liceo acompaña a jóvenes de la comunidad de Ciudad Varyná en su formación académica y humana.</p>
-        <a href="#quienes" class="btn">Conoce nuestra historia</a>
-      </div>
-      <img class="foto-destacada" src="img/fachada-liceo.png" alt="Fachada del Liceo Bolivariano Colinas del Llano">
+  <section id="portada" style="padding-top:72px;padding-bottom:72px;">
+    <span style="font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#D9B48A;">Bienvenido</span>
+    <h1 style="font-size:clamp(36px,6vw,64px);line-height:1.05;margin-top:12px;">Liceo Bolivariano Colinas del Llano</h1>
+    <p class="muted" style="font-size:18px;max-width:640px;">Educación Media General de 1.º a 5.º año en Ciudad Varyná, Alto Barinas, municipio Barinas, estado Barinas. Un liceo que aprende junto a su comunidad.</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:24px;">
+      <a class="btn" href="#quienes">Quiénes somos</a>
+      <a class="btn outline" href="#contacto" style="color:var(--paper);border-color:var(--paper);">Contáctanos</a>
     </div>
-  </div>
+  </section>
+
+  <!-- Foto grande del liceo -->
+  <section style="padding-top:48px;padding-bottom:0;">
+    <img class="photo" id="fotoLiceo" src="img/fachada-liceo.png" alt="Fachada del Liceo Bolivariano Colinas del Llano"
+         onerror="this.style.display='none';document.getElementById('fotoFallback').style.display='flex';">
+    <div class="photo-fallback" id="fotoFallback" style="display:none;">[Foto del liceo: coloca el archivo foto-liceo.png junto a index.html]</div>
+  </section>
 
   <!-- Quiénes somos -->
   <section id="quienes">
-    <div class="titulo">
-      <h2>¿Quiénes somos?</h2>
-      <span></span>
-    </div>
-    <div class="semblanza">
-      <h2>Una historia construida en comunidad</h2>
-      <p>La iniciativa del liceo comenzó en 2003-2004 en la Escuela Bolivariana Ciudad Varyná, para atender el crecimiento de la urbanización. En el período 2004-2005 abrió sus primeras dos secciones de séptimo año con 66 estudiantes; el 14 de noviembre de 2005 inició oficialmente como plantel independiente.</p>
-    </div>
-    <div class="dos-columnas">
-      <div>
-        <h3 style="color: var(--azul); margin-bottom: 12px;">Reseña Histórica</h3>
-        <p><strong>Los inicios (2003-2004):</strong> La iniciativa comenzó dentro de la Escuela Bolivariana Ciudad Varyná, como respuesta a la rápida expansión residencial de la urbanización. Para el periodo 2004-2005 se abrieron las primeras dos secciones de 7mo año, con 66 estudiantes pioneros que le dieron el nombre de "Colinas del Llano".</p>
-        <br>
-        <p><strong>Fundación oficial (14 de noviembre de 2005):</strong> Gracias al esfuerzo conjunto de vecinos, representantes y líderes comunitarios, el liceo abrió sus puertas de manera independiente con 458 estudiantes de 1º a 5º año, 27 docentes, 16 obreros y 6 secretarias.</p>
-      </div>
-      <img src="img/comunidad-escolar.png" alt="Estudiantes y comunidad reunidos en una actividad del liceo" loading="lazy">
-    </div>
+    <h2>Quiénes somos</h2>
+    <p class="muted" style="font-size:18px;max-width:760px;">Somos un liceo público de Educación Media General que forma jóvenes de 1.º a 5.º año, con proyectos comunitarios y una comunidad educativa activa.</p>
+  </section>
 
-    <br><br>
-
-    <div class="tarjetas">
-      <div class="tarjeta">
-        <h3>Misión</h3>
-        <p>Formar al nuevo republicano y bachiller mediante una educación humanística, científica y técnica, integrándolo a la sociedad venezolana con alto sentido de pertenencia, valores éticos y capacidad crítica.</p>
-      </div>
-      <div class="tarjeta">
-        <h3>Visión</h3>
-        <p>Consolidarse como un centro educativo modelo en el estado Barinas, promoviendo el desarrollo científico, cultural y productivo junto a la comunidad de Ciudad Varyná.</p>
-      </div>
+  <!-- Historia -->
+  <section id="historia">
+    <h2>Nuestra historia</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;">
+      <div class="card"><p class="muted" style="margin:0;">El proyecto educativo bolivariano comenzó en abril del año escolar 2003-2004, en la Escuela Bolivariana Ciudad Varyná, para atender a la comunidad que nacía con la urbanización.</p></div>
+      <div class="card"><p class="muted" style="margin:0;">En el año escolar 2004-2005 se abrieron dos secciones de primer año con 33 estudiantes cada una. Ese grupo de 66 escolares le dio su nombre al liceo: Colinas del Llano.</p></div>
+      <div class="card"><p class="muted" style="margin:0;">El 14 de noviembre de 2005 el liceo abrió sus puertas de manera formal, con 458 estudiantes, 27 docentes, 16 obreros y 6 secretarias.</p></div>
     </div>
   </section>
 
-  <!-- Proyectos -->
-  <section id="proyectos">
-    <div class="titulo">
-      <h2>Proyectos Institucionales</h2>
-      <span></span>
-    </div>
-    <div class="tarjetas">
-      <div class="tarjeta">
-        <h3>Proyecto de Grado de 5to Año</h3>
-        <p>Desarrollo de la primera página web oficial del liceo, creada por estudiantes de 5to año con HTML5, CSS3, JavaScript y GitHub Pages.</p>
-      </div>
-      <div class="tarjeta">
-        <h3>Proyectos Socioproductivos y Ambientales</h3>
-        <p>Conservación de la flora y fauna de los llanos venezolanos, recuperación de espacios del plantel y elaboración de productos de uso institucional.</p>
-      </div>
-    </div>
-
-    <br><br>
-
-    <div class="titulo">
-      <h2>Galería</h2>
-      <span></span>
-    </div>
-    <div class="galeria">
-      <figure class="foto-tarjeta">
-        <img src="img/proyecto-estudiantil.png" alt="Estudiantes y docentes presentan un proyecto escolar" loading="lazy">
-        <figcaption>Proyectos de nuestros estudiantes</figcaption>
-      </figure>
-      <figure class="foto-tarjeta">
-        <img src="img/aula-estudiantes.png" alt="Estudiantes participan en una actividad de aula" loading="lazy">
-        <figcaption>Aprendizaje en comunidad</figcaption>
-      </figure>
-      <figure class="foto-tarjeta">
-        <img src="img/feria-del-libro.png" alt="Estudiantes muestran sus trabajos en una feria del libro" loading="lazy">
-        <figcaption>Creatividad y lectura</figcaption>
-      </figure>
-      <figure class="foto-tarjeta">
-        <img src="img/jornada-atencion-estudiantil.png" alt="Jornada de atención integral para estudiantes del liceo" loading="lazy">
-        <figcaption>Jornada de atención integral estudiantil</figcaption>
-      </figure>
-      <figure class="foto-tarjeta">
-        <img src="img/actividad-deportiva-proyectos.png" alt="Estudiantes participan en actividades deportivas del calendario escolar" loading="lazy">
-        <figcaption>Deporte y actividades del calendario escolar</figcaption>
-      </figure>
-      <figure class="foto-tarjeta">
-        <img src="img/proyecto-diversidad-biologica.png" alt="Estudiantes presentan una actividad escolar sobre diversidad biológica" loading="lazy">
-        <figcaption>Proyecto escolar sobre diversidad biológica</figcaption>
-      </figure>
-    </div>
+  <!-- Estudiantes, Directiva, Horarios, Efemérides -->
+  <section id="estudiantes">
+    <h2>Estudiantes</h2>
+    <p class="muted">Vocería estudiantil: representación de derechos, actividades culturales y deportivas, y proyectos liderados por el estudiantado.</p>
+    <p class="muted">En <a href="#explorar">Explora el portal</a> encontrarás accesos desplegables a horarios, directiva, efemérides y más información.</p>
   </section>
-
-  <!-- Directiva -->
   <section id="directiva">
-    <div class="titulo">
-      <h2>Directiva y Cuerpo Docente</h2>
-      <span></span>
+    <h2>Directiva y departamentos</h2>
+    <div class="grid">
+      <div class="card"><strong>Subdirección Académica</strong><p class="muted" style="margin:6px 0 0;">Planificación de contenidos y coordinación de planes de estudio de 1.º a 5.º año.</p></div>
+      <div class="card"><strong>Control de Estudios y Evaluación</strong><p class="muted" style="margin:6px 0 0;">Registro de notas, boletines y certificaciones de estudio.</p></div>
+      <div class="card"><strong>Departamento de Orientación</strong><p class="muted" style="margin:6px 0 0;">Acompañamiento psicopedagógico y relación con representantes.</p></div>
+      <div class="card"><strong>Coordinación de 5to año</strong><p class="muted" style="margin:6px 0 0;">Seguimiento de las promociones salientes y trámites para la universidad.</p></div>
     </div>
-    <div class="tarjetas">
-      <div class="tarjeta">
-        <h3>Dirección General</h3>
-        <p>Dirección general institucional del plantel.</p>
-      </div>
-      <div class="tarjeta">
-        <h3>Subdirección Académica</h3>
-        <p>Planificación pedagógica, horarios y supervisión de planes de estudio.</p>
-      </div>
-      <div class="tarjeta">
-        <h3>Subdirección Administrativa</h3>
-        <p>Gestión de recursos, planta física y talento humano.</p>
-      </div>
-      <div class="tarjeta">
-        <h3>Control de Estudios y Evaluación</h3>
-        <p>Registro de notas, constancias, títulos de bachiller y expedientes estudiantiles.</p>
-      </div>
-      <div class="tarjeta">
-        <h3>Coordinaciones de Año</h3>
-        <p>Atención pedagógica y disciplinaria de 1ro a 5to año.</p>
-      </div>
-      <div class="tarjeta">
-        <h3>Cuerpo Docente</h3>
-        <p>Especialistas en Matemáticas, Ciencias Naturales, Castellano, Inglés, Geografía, Historia y Ciudadanía, Educación Física y CRP.</p>
-      </div>
-    </div>
-    <figure class="foto-directiva">
-      <img src="img/equipo-directivo.png" alt="Personal docente, equipo directivo y trabajadores del liceo" loading="lazy">
-      <figcaption>El equipo que acompaña la formación de nuestra comunidad estudiantil.</figcaption>
-    </figure>
   </section>
-
-  <!-- Noticias -->
-  <section id="noticias">
-    <div class="titulo">
-      <h2>Anuncios y Noticias</h2>
-      <span></span>
+  <section id="horarios">
+    <h2>Horarios</h2>
+    <p class="muted">Este espacio queda preparado para agregar los horarios oficiales por año y sección.</p>
+    <div class="grid">
+      <div class="horario-reservado"><strong>1.º año</strong><br>Espacio reservado para agregar horarios.</div>
+      <div class="horario-reservado"><strong>2.º año</strong><br>Espacio reservado para agregar horarios.</div>
+      <div class="horario-reservado"><strong>3.º año</strong><br>Espacio reservado para agregar horarios.</div>
+      <div class="horario-reservado"><strong>4.º año</strong><br>Espacio reservado para agregar horarios.</div>
+      <div class="horario-reservado"><strong>5.º año</strong><br>Espacio reservado para agregar horarios.</div>
     </div>
-    <div class="noticia">
-      <span class="fecha">Octubre 2026</span>
-      <h3>Inicio de Actividades Académicas 2026-2027</h3>
-      <p>Bienvenida a toda la comunidad estudiantil, docente, administrativa y obrera. Se convoca a los representantes a las primeras asambleas de aula.</p>
-    </div>
-    <div class="noticia">
-      <span class="fecha">Noviembre 2026</span>
-      <h3>Aniversario del Plantel</h3>
-      <p>Conmemoración de los 14 de noviembre de 2005, con actividades culturales, deportivas y muestras pedagógicas.</p>
-    </div>
-    <div class="noticia">
-      <span class="fecha">Próximamente</span>
-      <h3>Entrega de Proyectos Socioproductivos y Digitales</h3>
-      <p>Presentación pública de los proyectos comunitarios y tecnológicos de los estudiantes de 5to año.</p>
+  </section>
+  <section id="efemerides">
+    <h2>Efemérides</h2>
+    <p class="muted">Fechas importantes de la institución y del calendario patrio.</p>
+    <div class="grid afiche-grid">
+      <figure class="card afiche-card">
+        <img src="img/efemeride-jose-gregorio-hernandez.png" alt="Afiche institucional sobre el natalicio del Dr. José Gregorio Hernández, el 26 de octubre" loading="lazy">
+        <figcaption>Natalicio del Dr. José Gregorio Hernández · 26 de octubre de 1864</figcaption>
+      </figure>
+      <figure class="card afiche-card">
+        <img src="img/efemeride-batalla-carabobo.jpeg" alt="Afiche escolar sobre la Batalla de Carabobo, librada el 24 de junio de 1821" loading="lazy">
+        <figcaption>Batalla de Carabobo · 24 de junio de 1821</figcaption>
+      </figure>
     </div>
   </section>
 
-  <!-- Contacto -->
-  <section id="contacto">
-    <div class="titulo">
-      <h2>Contáctanos</h2>
-      <span></span>
-    </div>
-    <div class="contacto">
-      <div>
-        <h3 style="color: var(--azul); margin-bottom: 12px;">Estamos para ayudarte</h3>
-        <p>¿Tienes alguna consulta? Escríbenos. Al enviar, se abrirá Gmail con tu mensaje preparado para que lo revises.</p>
-        <div class="redes" style="margin-top: 20px;">
-          <a href="#">Instagram: @LiceoColinasDelLlano</a><br><br>
-          <a href="#">Facebook: Liceo Bolivariano Colinas del Llano Oficial</a><br><br>
-          <a href="#">TikTok: @LiceoColinasBarinas</a>
+  <!-- Secciones desplegables del portal -->
+  <section id="explorar">
+    <h2>Explora el portal</h2>
+    <p class="muted">Pulsa cada sección para desplegar su contenido.</p>
+    <div class="portal-list">
+      <details>
+        <summary>Estudiantes</summary>
+        <p class="muted">Vocería estudiantil, actividades culturales y deportivas, y proyectos liderados por el estudiantado.</p>
+        <a href="#estudiantes">Ver sección de estudiantes</a>
+      </details>
+      <details>
+        <summary>Horarios por año</summary>
+        <div class="grid">
+          <div class="horario-reservado"><strong>1.º año</strong><br>Horario pendiente de agregar.</div>
+          <div class="horario-reservado"><strong>2.º año</strong><br>Horario pendiente de agregar.</div>
+          <div class="horario-reservado"><strong>3.º año</strong><br>Horario pendiente de agregar.</div>
+          <div class="horario-reservado"><strong>4.º año</strong><br>Horario pendiente de agregar.</div>
+          <div class="horario-reservado"><strong>5.º año</strong><br>Horario pendiente de agregar.</div>
         </div>
-      </div>
-      <form id="formulario">
-        <label for="nombre">Nombre completo</label>
-        <input id="nombre" name="nombre" type="text" autocomplete="name" placeholder="Tu nombre completo" required>
-        <label for="correo">Tu correo electrónico</label>
-        <input id="correo" name="correo" type="email" autocomplete="email" placeholder="tunombre@ejemplo.com" required>
-        <label for="mensaje">Mensaje</label>
-        <textarea id="mensaje" name="mensaje" placeholder="Escribe tu mensaje" required></textarea>
-        <button type="submit">Enviar por Gmail</button>
-      </form>
+        <p><a href="#horarios">Ir a horarios</a></p>
+      </details>
+      <details>
+        <summary>Directiva y departamentos</summary>
+        <p class="muted">Consulta información de Subdirección Académica, Control de Estudios, Orientación y Coordinación de 5.º año.</p>
+        <a href="#directiva">Ver directiva y departamentos</a>
+      </details>
+      <details>
+        <summary>Historia y quiénes somos</summary>
+        <p class="muted">Conoce la historia, la comunidad educativa y la misión del liceo.</p>
+        <a href="#historia">Ver nuestra historia</a>
+      </details>
+      <details>
+        <summary>Efemérides</summary>
+        <p class="muted">Espacio reservado para publicar fechas importantes de la institución y del calendario escolar.</p>
+        <a href="#efemerides">Ver efemérides</a>
+      </details>
+      <details>
+        <summary>Anuncios y proyectos</summary>
+        <p class="muted">Actividades, proyectos y comunicados de la comunidad educativa, con enlace a la fuente institucional cuando esté disponible.</p>
+        <a href="#anuncios">Ver anuncios y proyectos</a>
+      </details>
+      <details>
+        <summary>Galería y contacto</summary>
+        <p class="muted">Explora imágenes del plantel y encuentra nuestros datos de contacto.</p>
+        <a href="#galeria">Ver galería</a> · <a href="#contacto">Contáctanos</a>
+      </details>
     </div>
   </section>
 
-  <!-- Pie de página -->
-  <footer>
-    <p><strong>Liceo Bolivariano "Colinas del Llano"</strong></p>
-    <p>
-      <a href="#">Instagram</a>
-      <a href="#">Facebook</a>
-      <a href="#">TikTok</a>
-    </p>
-    <div class="pie-contacto">
-      <p><strong>📍 Ubicación:</strong> Urbanización Ciudad Varyná, Sectores III y IV Araguaney, Parroquia Alto Barinas, Barinas, Venezuela.</p>
-      <p><strong>📧 Correo:</strong> <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=liceobolivarianocolinasdelllano%40gmail.com">liceobolivarianocolinasdelllano@gmail.com</a></p>
+  <!-- Anuncios -->
+  <section id="anuncios">
+    <h2>Anuncios y proyectos</h2>
+    <div class="grid">
+      <a class="card proyecto-enlace" href="https://www.instagram.com/ce_colinas/" target="_blank" rel="noopener noreferrer" aria-label="Consultar la fuente institucional del Encuentro de Corazones en Instagram">
+        <span class="muted" style="font-size:13px;">29 de marzo de 2026</span>
+        <h3 style="font-size:20px;margin-top:6px;">Encuentro de Corazones</h3>
+        <p class="muted" style="margin:0;">Estudiantes de 4.º año compartieron una jornada con personas mayores.</p>
+        <span class="fuente-proyecto">Consultar fuente institucional ↗</span>
+      </a>
+      <a class="card proyecto-enlace" href="https://www.instagram.com/ce_colinas/" target="_blank" rel="noopener noreferrer" aria-label="Consultar la fuente institucional del Proyecto Gótica de Amor en Instagram">
+        <span class="muted" style="font-size:13px;">25 de febrero de 2026</span>
+        <h3 style="font-size:20px;margin-top:6px;">Proyecto Gótica de Amor</h3>
+        <p class="muted" style="margin:0;">Trabajo comunitario para dar color a las paredes del plantel.</p>
+        <span class="fuente-proyecto">Consultar fuente institucional ↗</span>
+      </a>
     </div>
-    <p>Hecho por Pollo</p>
-    <p>© 2026 Todos los derechos reservados</p>
+    <div class="grid afiche-grid">
+      <figure class="card afiche-card">
+        <img src="img/convocatoria-votacion.png" alt="Invitación del Complejo Educativo Colinas del Llano a participar en la votación; fecha y hora por completar" loading="lazy">
+        <figcaption>Convocatoria a votación · Consulta en el plantel la fecha y la hora.</figcaption>
+      </figure>
+      <figure class="card afiche-card">
+        <img src="img/bienvenida-segundo-momento-pedagogico.png" alt="Afiche de bienvenida a todos los estudiantes al segundo momento pedagógico" loading="lazy">
+        <figcaption>Bienvenida a todos los estudiantes al segundo momento pedagógico.</figcaption>
+      </figure>
+      <figure class="card afiche-card">
+        <img src="img/bienvenida-ano-escolar.jpeg" alt="Afiche de bienvenida al nuevo año escolar; fecha, hora y lugar de inscripción pendientes" loading="lazy">
+        <figcaption>Bienvenida al nuevo año escolar · Fecha, hora y lugar de inscripción por confirmar.</figcaption>
+      </figure>
+      <figure class="card afiche-card">
+        <img src="img/aviso-entrega-boletas.jpeg" alt="Aviso de entrega de boletas del primer momento pedagógico para ambos turnos; fecha y hora pendientes" loading="lazy">
+        <figcaption>Entrega de boletas del primer momento pedagógico, ambos turnos · Fecha y hora por confirmar.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Galería del plantel -->
+  <section id="galeria">
+    <h2>Nuestro plantel</h2>
+    <div class="grid">
+      <img class="photo" src="img/aula-estudiantes.png" alt="Estudiantes en una actividad de aula">
+      <img class="photo" src="img/comunidad-escolar.png" alt="Comunidad educativa reunida en una actividad del liceo">
+    </div>
+  </section>
+
+  <!-- Contáctanos -->
+  <section id="contacto">
+    <h2>Contáctanos</h2>
+    <div class="grid">
+      <div class="card">
+        <strong>Escríbenos</strong>
+        <p class="muted" style="margin:8px 0 0;">Correo: <a href="mailto:liceocolinas@gmail.com">liceocolinas@gmail.com</a><br>Instagram: <a href="https://www.instagram.com/ce_colinas/" target="_blank" rel="noopener noreferrer">@ce_colinas</a><br><a href="https://www.facebook.com/search/top?q=Liceo%20Nacional%20Bolivariano%20Colinas%20Del%20Llano" target="_blank" rel="noopener noreferrer">Buscar en Facebook</a><br><a href="https://www.tiktok.com/search?q=Liceo%20Bolivariano%20Colinas%20del%20Llano" target="_blank" rel="noopener noreferrer">Buscar en TikTok</a></p>
+      </div>
+      <div class="card">
+        <strong>Ubicación</strong>
+        <p class="muted" style="margin:8px 0;">Urbanización Ciudad Varyná, sectores III y IV Araguaney, parroquia Alto Barinas.</p>
+        <a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Liceo+Bolivariano+Colinas+del+Llano+Ciudad+Varyna+Barinas">Cómo llegar</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dudas y sugerencias -->
+  <section id="dudas">
+    <h2>Dudas y sugerencias</h2>
+    <details><summary>¿Cómo solicito una constancia o certificación de estudios?</summary><p class="muted">Consulta con Control de Estudios y Evaluación. [Completar con el procedimiento real]</p></details>
+    <details><summary>¿Dónde consulto notas y boletines?</summary><p class="muted">Se gestionan en Control de Estudios y Evaluación. [Completar]</p></details>
+    <details><summary>¿Cómo contacto al Departamento de Orientación?</summary><p class="muted">Escribe al correo del liceo indicando el motivo. [Completar]</p></details>
+    <details><summary>¿Cómo envío una sugerencia?</summary><p class="muted">Escríbenos por correo o redes oficiales con tu idea.</p></details>
+  </section>
+
+  <!-- Privacidad y pie -->
+  <section id="privacidad" style="background:var(--white);">
+    <h2>Política de privacidad</h2>
+    <p class="muted" style="max-width:760px;">El acceso inicial solicita únicamente nombre y sección para esta visita. Esta página no guarda esos datos en una base de datos. Para contactar al liceo, puedes usar los enlaces de correo y redes publicados en esta página.</p>
+  </section>
+  <footer>
+    <p>© 2026 Liceo Bolivariano Colinas del Llano · Ciudad Varyná, Alto Barinas, Barinas</p>
+    <div class="footer-redes" aria-label="Contacto y redes sociales">
+      <a href="mailto:liceocolinas@gmail.com">Correo: liceocolinas@gmail.com</a>
+      <a href="https://www.instagram.com/ce_colinas/" target="_blank" rel="noopener noreferrer">Instagram: @ce_colinas</a>
+      <a href="https://www.facebook.com/search/top?q=Liceo%20Nacional%20Bolivariano%20Colinas%20Del%20Llano" target="_blank" rel="noopener noreferrer">Facebook: buscar cuenta oficial</a>
+      <a href="https://www.tiktok.com/search?q=Liceo%20Bolivariano%20Colinas%20del%20Llano" target="_blank" rel="noopener noreferrer">TikTok: buscar cuenta oficial</a>
+    </div>
   </footer>
+</div>
 
-  <script>
-    const secciones = ['quienes', 'proyectos', 'directiva', 'noticias', 'contacto'];
+<script>
+// Inicio de sesión: valida y lanza la animación
+const form = document.getElementById('loginForm');
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const nombre = document.getElementById('nombre').value.trim();
+  const seccion = document.getElementById('seccion').value.trim();
+  const err = document.getElementById('loginError');
+  if (!nombre || !seccion) {
+    err.textContent = 'Completa todos los campos para ingresar.';
+    return;
+  }
+  err.textContent = '';
+  document.getElementById('login').style.display = 'none';
+  const intro = document.getElementById('intro');
+  intro.classList.add('on');
+  setTimeout(() => {
+    intro.classList.remove('on');
+    document.getElementById('site').classList.add('on');
+    window.scrollTo(0, 0);
+  }, 2400);
+});
 
-    function actualizarVista() {
-      const destino = window.location.hash.slice(1);
-      document.body.classList.toggle('vista-seccion', secciones.includes(destino));
-      document.body.classList.toggle('vista-inicio', !secciones.includes(destino));
-    }
+// Desplazamiento animado al pulsar una opción del menú
+function scrollSuave(destino, duracion = 900) {
+  const inicio = window.scrollY;
+  const fin = destino.getBoundingClientRect().top + window.scrollY - 72;
+  const cambio = fin - inicio;
+  let t0 = null;
+  function paso(t) {
+    if (t0 === null) t0 = t;
+    const p = Math.min((t - t0) / duracion, 1);
+    const e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; // easeInOutCubic
+    window.scrollTo(0, inicio + cambio * e);
+    if (p < 1) requestAnimationFrame(paso);
+  }
+  requestAnimationFrame(paso);
+}
+document.querySelectorAll('a[href^="#"]').forEach((enlace) => {
+  enlace.addEventListener('click', (e) => {
+    const destino = document.querySelector(enlace.getAttribute('href'));
+    if (!destino) return;
+    e.preventDefault();
+    scrollSuave(destino);
+  });
+});
 
-    actualizarVista();
-    window.addEventListener('hashchange', actualizarVista);
+// Las secciones aparecen con animación al bajar
+document.querySelectorAll('section').forEach((s) => s.classList.add('reveal'));
+const observador = new IntersectionObserver((entradas) => {
+  entradas.forEach((en) => { if (en.isIntersecting) en.target.classList.add('show'); });
+}, { threshold: 0.15 });
+document.querySelectorAll('section.reveal').forEach((s) => observador.observe(s));
 
-    // Menú responsive
-    const menuBtn = document.getElementById('menuBtn');
-    const menu = document.getElementById('menu');
-
-    menuBtn.addEventListener('click', () => {
-      const abierto = menu.classList.toggle('activo');
-      menuBtn.setAttribute('aria-expanded', String(abierto));
-      menuBtn.setAttribute('aria-label', abierto ? 'Cerrar menú' : 'Abrir menú');
-    });
-
-    // Cerrar el menú al hacer clic en un enlace (en celular)
-    document.querySelectorAll('nav a').forEach(enlace => {
-      enlace.addEventListener('click', () => {
-        menu.classList.remove('activo');
-        menuBtn.setAttribute('aria-expanded', 'false');
-        menuBtn.setAttribute('aria-label', 'Abrir menú');
-      });
-    });
-
-    // Controles de tamaño del texto para facilitar la lectura.
-    let tamanoTexto = 100;
-    const nivelTexto = document.getElementById('nivelTexto');
-
-    function actualizarTamanoTexto() {
-      document.documentElement.style.fontSize = `${tamanoTexto}%`;
-      nivelTexto.value = `${tamanoTexto}%`;
-      nivelTexto.textContent = `${tamanoTexto}%`;
-    }
-
-    document.getElementById('aumentarTexto').addEventListener('click', () => {
-      tamanoTexto = Math.min(tamanoTexto + 10, 160);
-      actualizarTamanoTexto();
-    });
-    document.getElementById('reducirTexto').addEventListener('click', () => {
-      tamanoTexto = Math.max(tamanoTexto - 10, 80);
-      actualizarTamanoTexto();
-    });
-    document.getElementById('restablecerTexto').addEventListener('click', () => {
-      tamanoTexto = 100;
-      actualizarTamanoTexto();
-    });
-
-    // Abrir Gmail con los datos del formulario; el usuario confirma el envío desde Gmail.
-    document.getElementById('formulario').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const formulario = e.currentTarget;
-      const datos = new FormData(formulario);
-      const asunto = 'Mensaje desde la página web del Liceo';
-      const cuerpo = [
-        `Nombre: ${datos.get('nombre')}`,
-        `Correo de contacto: ${datos.get('correo')}`,
-        '',
-        'Mensaje:',
-        datos.get('mensaje')
-      ].join('\n');
-      const parametros = new URLSearchParams({
-        view: 'cm',
-        fs: '1',
-        to: 'liceobolivarianocolinasdelllano@gmail.com',
-        su: asunto,
-        body: cuerpo
-      });
-
-      window.location.href = `https://mail.google.com/mail/?${parametros.toString()}`;
-    });
-  </script>
-
+</script>
 </body>
 </html>
